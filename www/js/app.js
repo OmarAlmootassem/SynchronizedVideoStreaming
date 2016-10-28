@@ -28,13 +28,13 @@ angular.module('starter', ['ionic', 'ngMaterial'])
 
   $stateProvider
 
-  .state('sign_up', {
-    url: '/sign_up',
-    templateUrl: 'templates/sign_up.html',
+  .state('auth', {
+    url: '/auth',
+    templateUrl: 'templates/auth.html',
     controller: 'authCtrl'
   });
 
-  $urlRouterProvider.otherwise('/sign_up');
+  $urlRouterProvider.otherwise('/auth');
 }]);
 
 angular.module('starter').controller('authCtrl', ['$scope', '$timeout', '$state', '$mdToast', function($scope, $timeout, $state, $mdToast) {
