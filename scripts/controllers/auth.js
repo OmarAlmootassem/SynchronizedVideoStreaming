@@ -1,4 +1,4 @@
-angular.module('starter').controller('authCtrl', ['$scope', '$timeout', '$state', '$mdToast', function($scope, $timeout, $state, $mdToast) {
+angular.module('starter').controller('authCtrl', ['$scope', '$mdToast', function($scope, $mdToast) {
 
   $scope.showSignIn = false;
 

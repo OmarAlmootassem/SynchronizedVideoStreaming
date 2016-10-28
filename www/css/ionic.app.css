@@ -9856,3 +9856,15 @@ a.button {
   color: #5C789C;
   margin-left: 50px;
   margin-top: 10px; }
+
+.header-title-no-image h2 {
+  color: #5C789C;
+  margin-top: 10px; }
+
+.movie-repeater {
+  margin-top: 5vh !important; }
+
+.poster-image {
+  background-size: auto 240px !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important; }

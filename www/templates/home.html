@@ -1,0 +1,25 @@
+<ion-view cache-view="false" view-title="Home" name="home" ng-controller="homeCtrl" ng-init='getMovies()' class='light' ng-cloak>
+  <ion-content scroll="false">
+    <div class="row">
+      <div class="col col-33 header">
+        <div class="header-title-no-image">
+          <h2>Choose What To Watch</h2>
+        </div>
+      </div>
+    </div>
+    <div class="row movie-repeater">
+      <md-card ng-repeat="movie in movies track by $index" ng-click="movieChosen(movie)">
+      <md-card-content layout="row" layout-align="space-between">
+        <div class="md-media-xl card-media poster-image" style='background:url({{movie.poster}})'></div>
+      </md-card-content>
+       <md-card-title>
+         <md-card-title-text>
+           <span class="md-headline">{{movie.name}}</span>
+           <span class="md-subhead">{{movie.year}}</span>
+         </md-card-title-text>
+       </md-card-title>
+     </md-card>
+    </div>
+
+  </ion-content>
+</ion-view>

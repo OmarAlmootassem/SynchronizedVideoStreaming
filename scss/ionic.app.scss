@@ -81,3 +81,20 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
     margin-top:10px;
   }
 }
+
+.header-title-no-image {
+  h2{
+    color: $blue;
+    margin-top:10px;
+  }
+}
+
+.movie-repeater {
+  margin-top: 5vh !important;
+}
+
+.poster-image {
+  background-size: auto 240px !important;
+  background-repeat:no-repeat !important;
+  background-position: center !important;
+}
