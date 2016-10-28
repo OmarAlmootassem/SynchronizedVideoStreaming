@@ -1,0 +1,68 @@
+<ion-view cache-view="false" view-title="Sign Up" name="sign_up" ng-controller="authCtrl" class='light' ng-cloak>
+  <ion-content scroll="false">
+    <div class="row">
+      <div class="col col-33 header">
+        <div class="header-image">
+          <img src="img/ic_person_add.svg" />
+        </div>
+        <div class="header-title">
+          <h2>Create an Account</h2>
+        </div>
+      </div>
+    </div>
+    <div class="row sign-up" ng-if="!showSignIn">
+      <div class="col col-50 col-offset-25">
+        <form ng-submit="signUp(user)">
+          <label class="item item-input">
+            <span class="input-label">Your Name</span>
+            <input type="text" submit-required="true"  ng-model="user.name" ng-required="true">
+          </label>
+          <label class="item item-input">
+            <span class="input-label">Username</span>
+            <input type="text" submit-required="true"  ng-model="user.username" ng-required="true">
+          </label>
+          <label class="item item-input">
+            <span class="input-label">Email</span>
+            <input type="email" submit-required="true"  ng-model="user.email" ng-required="true">
+          </label>
+          <label class="item item-input">
+            <span class="input-label">Password</span>
+            <input type="password" submit-required="true"  ng-model="user.password" ng-required="true">
+          </label>
+          <label class="item item-input">
+            <span class="input-label">Confirm Password</span>
+            <input type="password" submit-required="true"  ng-model="user.confirmpassword" ng-required="true">
+          </label>
+          <div style="text-align:center">
+            <md-button type="submit" class='col col-50 md-raised md-primary' ng-disabled="!user.name || !user.email || (user.password != user.confirmpassword) || !user.password">Create a Free Account</md-button>
+          </div>
+        </form>
+        <div style="text-align:center">
+          <md-button class='col col-50 md-primary' ng-click="switch()">Already have an account? Sign in</md-button>
+        </div>
+      </div>
+    </div>
+
+      <div class="row sign-in" ng-if="showSignIn">
+        <div class="col col-50 col-offset-25">
+          <form ng-submit="signIn(user)">
+            <label class="item item-input">
+              <span class="input-label">Email</span>
+              <input type="email" submit-required="true"  ng-model="user.email" ng-required="true">
+            </label>
+            <label class="item item-input">
+              <span class="input-label">Password</span>
+              <input type="password" submit-required="true"  ng-model="user.password" ng-required="true">
+            </label>
+            <div style="text-align:center">
+              <md-button type="submit" class='col col-50 md-raised md-primary' ng-disabled="!user.email || !user.password">Sign In</md-button>
+            </div>
+          </form>
+          <div style="text-align:center">
+            <md-button class='col col-50 md-primary' ng-click="switch()">Don't have an account? Sign up</md-button>
+          </div>
+        </div>
+
+    </div>
+  </ion-content>
+</ion-view>

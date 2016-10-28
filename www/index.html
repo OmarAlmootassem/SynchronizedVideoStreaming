@@ -50,14 +50,19 @@
   <body ng-app="starter" ng-controller="navCtrl" ng-cloak>
 
     <ion-pane>
-      <ion-header-bar class="bar bar-header bar-dark header">
-        <h1 class="title">{{title}}</h1>
-      </ion-header-bar>
-      <md-button class="md-fab md-primary profile-fab" aria-label="Profile" ng-if='!loggedIn'>
-          <md-icon md-svg-src="img/ic_person_white_24px.svg"></md-icon>
+      <md-toolbar class="app-header">
+      <div class="md-toolbar-tools">
+        <h2>
+          <span flex>Synchronized Video Streaming</span>
+        </h2>
+        <span flex></span>
+        <md-button class="md-fab md-mini" aria-label="Profile" on-hold='signOut()'>
+          <md-icon md-svg-icon="img/ic_person.svg"></md-icon>
         </md-button>
-      <ion-content class='dark'>
-      </ion-content>
+      </div>
+    </md-toolbar>
+      <ion-nav-view class='dark'>
+      </ion-nav-view>
     </ion-pane>
   </body>
 </html>

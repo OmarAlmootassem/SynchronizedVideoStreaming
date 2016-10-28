@@ -21,4 +21,18 @@ angular.module('starter', ['ionic', 'ngMaterial'])
       StatusBar.styleDefault();
     }
   });
+}])
+
+.config(['$stateProvider', '$urlRouterProvider', '$ionicConfigProvider', function($stateProvider, $urlRouterProvider, $ionicConfigProvider){
+  $ionicConfigProvider.views.transition('none');
+
+  $stateProvider
+
+  .state('sign_up', {
+    url: '/sign_up',
+    templateUrl: 'templates/sign_up.html',
+    controller: 'authCtrl'
+  });
+
+  $urlRouterProvider.otherwise('/sign_up');
 }]);
