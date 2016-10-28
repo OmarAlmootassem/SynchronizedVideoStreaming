@@ -9814,3 +9814,18 @@ a.button {
   opacity: 0;
   -webkit-transition-duration: 0s;
   transition-duration: 0s; }
+
+.header {
+  height: 100px; }
+  .header h1 {
+    vertical-align: middle !important;
+    font-size: 2em !important; }
+
+.profile-fab {
+  position: fixed;
+  top: 65px;
+  left: 90vw;
+  z-index: 100 !important; }
+
+.dark {
+  background-color: black; }

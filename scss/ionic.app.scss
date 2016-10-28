@@ -20,3 +20,22 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
+
+.header {
+  height: 100px;
+  h1 {
+    vertical-align: middle !important;
+    font-size: 2em !important;
+  }
+}
+
+.profile-fab {
+  position: fixed;
+  top:65px;
+  left: 90vw;
+  z-index: 100 !important;
+}
+
+.dark {
+  background-color: black;
+}

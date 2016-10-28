@@ -11,13 +11,17 @@ var uglify = require('gulp-uglify');
 
 
 var paths = {
-  sass: ['./scss/**/*.scss'],
+  sass: ['./scss/**/*.scss'
+],
   scripts: [
   './scripts/*.js',
   './scripts/**/*.js',
-  './scripts/**/*.*.js',
+  './scripts/**/*.*.js'
 ],
 libs: [
+  // './node_modules/angular-animate/angular-animate.min.js',
+  './node_modules/angular-material/angular-material.min.js',
+  './node_modules/angular-aria/angular-aria.min.js'
 ]
 };
 
