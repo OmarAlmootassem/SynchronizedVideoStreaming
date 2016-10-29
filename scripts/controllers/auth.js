@@ -7,7 +7,8 @@ angular.module('starter').controller('authCtrl', ['$scope', '$mdToast', function
         firebase.database().ref('users/' + fbUser.uid).update({
           name: user.name,
           username: user.username,
-          status: 'online'
+          status: 'online',
+          email: user.email
         });
         console.log(user);
       }).catch(function(error) {

@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="row movie-repeater">
-      <md-card ng-repeat="movie in movies track by $index" ng-click="movieChosen(movie)">
+      <md-card md-ink-ripple ng-repeat="movie in movies track by $index" ng-click="movieChosen(movie)">
       <md-card-content layout="row" layout-align="space-between">
         <div class="md-media-xl card-media poster-image" style='background:url({{movie.poster}})'></div>
       </md-card-content>

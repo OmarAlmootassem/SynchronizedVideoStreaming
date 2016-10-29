@@ -22,8 +22,8 @@ angular.module('starter', ['ionic', 'ngMaterial'])
     }
 
     firebase.auth().onAuthStateChanged(function(administrators) {
-        $rootScope.user = firebase.auth().currentUser;
-        if ($rootScope.user != null) {
+        $rootScope.fbUser = firebase.auth().currentUser;
+        if ($rootScope.fbUser != null) {
             $rootScope.isLoggedIn = true;
             console.log("loggedIN");
             $state.go("home");
@@ -51,6 +51,12 @@ angular.module('starter', ['ionic', 'ngMaterial'])
     controller: 'authCtrl'
   })
 
+  .state('profile', {
+    url: '/profile',
+    templateUrl: 'templates/profile.html',
+    controller: 'profileCtrl'
+  })
+
   .state('home', {
     url: '/home',
     templateUrl: 'templates/home.html',
@@ -69,7 +75,8 @@ angular.module('starter').controller('authCtrl', ['$scope', '$mdToast', function
         firebase.database().ref('users/' + fbUser.uid).update({
           name: user.name,
           username: user.username,
-          status: 'online'
+          status: 'online',
+          email: user.email
         });
         console.log(user);
       }).catch(function(error) {
@@ -142,6 +149,69 @@ angular.module('starter').controller('navCtrl', ['$scope', '$timeout', '$state',
         // Sign-out successful.
       }, function(error) {
         // An error happened.
+      });
+    }
+
+    $scope.goToProfile = function(){
+      $state.go("profile");
+    }
+
+    $scope.ETgoHome = function(){
+      $state.go("home");
+    }
+  }]);
+
+angular.module('starter').controller('profileCtrl', ['$scope', '$mdToast', '$state', '$rootScope', function($scope, $mdToast, $state, $rootScope) {
+
+    $scope.friendIds = [];
+    $scope.friends = [];
+
+    $scope.getProfileInfo = function(){
+      firebase.database().ref('users/' + $rootScope.fbUser.uid).once('value').then(function(snapshot){
+        $scope.user = snapshot.val();
+        console.log($scope.user);
+        console.log($scope.friendIds);
+        if (!$scope.user.phone){
+          $scope.user.phone = "";
+        }
+      });
+      firebase.database().ref('users/' + $rootScope.fbUser.uid + '/friends').once('value').then(function(snapshot){
+        snapshot.forEach(function(childSnapshot){
+          $scope.friendIds.push(childSnapshot.key);
+        });
+        ($scope.friendIds).forEach(function(friend){
+          console.log("FRIEND: " + friend);
+          firebase.database().ref('users/' + friend).once('value').then(function(friendSnapshot){
+            $scope.friends.push({
+              name: friendSnapshot.val().name,
+              status: friendSnapshot.val().status
+            });
+            $scope.$applyAsync();
+          });
+        });
+        console.log($scope.friends);
+      });
+    }
+
+    $scope.updateProfile = function(){
+
+      firebase.database().ref('users/' + $rootScope.fbUser.uid).update({
+        name: $scope.user.name,
+        phone: $scope.user.phone,
+        email: $rootScope.fbUser.email,
+        username: $scope.user.username
+      }, function(error){
+        var message;
+        if (error){
+          message = 'Error ' + errorCode + ": " + errorMessage
+        } else {
+          message = 'Profile Updated'
+        }
+        $mdToast.show(
+        $mdToast.simple()
+          .textContent(message)
+          .hideDelay(3000)
+        );
       });
     }
   }]);

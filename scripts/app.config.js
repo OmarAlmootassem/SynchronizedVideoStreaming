@@ -22,8 +22,8 @@ angular.module('starter', ['ionic', 'ngMaterial'])
     }
 
     firebase.auth().onAuthStateChanged(function(administrators) {
-        $rootScope.user = firebase.auth().currentUser;
-        if ($rootScope.user != null) {
+        $rootScope.fbUser = firebase.auth().currentUser;
+        if ($rootScope.fbUser != null) {
             $rootScope.isLoggedIn = true;
             console.log("loggedIN");
             $state.go("home");
@@ -49,6 +49,12 @@ angular.module('starter', ['ionic', 'ngMaterial'])
     url: '/auth',
     templateUrl: 'templates/auth.html',
     controller: 'authCtrl'
+  })
+
+  .state('profile', {
+    url: '/profile',
+    templateUrl: 'templates/profile.html',
+    controller: 'profileCtrl'
   })
 
   .state('home', {

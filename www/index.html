@@ -53,10 +53,10 @@
       <md-toolbar class="app-header">
       <div class="md-toolbar-tools">
         <h2>
-          <span flex>Synchronized Video Streaming</span>
+          <span class="title" flex ng-click="ETgoHome()">Synchronized Video Streaming</span>
         </h2>
         <span flex></span>
-        <md-button class="md-fab md-mini" aria-label="Profile" on-hold='signOut()'>
+        <md-button class="md-fab md-mini" aria-label="Profile" ng-click="goToProfile()" on-hold='signOut()'>
           <md-icon md-svg-icon="img/ic_person.svg"></md-icon>
         </md-button>
       </div>

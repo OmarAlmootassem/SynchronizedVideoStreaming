@@ -8,4 +8,12 @@ angular.module('starter').controller('navCtrl', ['$scope', '$timeout', '$state',
         // An error happened.
       });
     }
+
+    $scope.goToProfile = function(){
+      $state.go("profile");
+    }
+
+    $scope.ETgoHome = function(){
+      $state.go("home");
+    }
   }]);

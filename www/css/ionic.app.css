@@ -9868,3 +9868,20 @@ a.button {
   background-size: auto 240px !important;
   background-repeat: no-repeat !important;
   background-position: center !important; }
+
+md-card[md-ink-ripple] {
+  position: relative; }
+
+md-card {
+  cursor: pointer;
+  cursor: hand; }
+
+.title {
+  cursor: pointer;
+  cursor: hand; }
+
+.profile-info {
+  margin-top: 5vh !important; }
+
+.add-friends-fab {
+  top: 38px; }
