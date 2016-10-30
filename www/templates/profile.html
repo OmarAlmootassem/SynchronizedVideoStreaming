@@ -13,6 +13,11 @@
 
     <div class="row profile-info">
       <div class="col col-50 col-offset-25">
+        <md-toolbar layout="row" class="md-primary">
+          <div class="md-toolbar-tools">
+            <span>Personal Information</span>
+          </div>
+        </md-toolbar>
         <md-content class="md-no-momentum">
             <md-input-container class="md-icon-float md-block">
               <!-- Use floating label instead of placeholder -->
@@ -58,15 +63,15 @@
           </md-button>
         </md-toolbar>
         <md-content>
-      <md-list flex>
-        <md-list-item class="md-2-line" ng-repeat="friend in friends track by $index" ng-click="null">
-          <div class="md-list-item-text" layout="column">
-            <h3>{{friend.name}}</h3>
-            <h4>{{ friend.status }}</h4>
-          </div>
-        </md-list-item>
-      </md-list>
-    </md-content>
+          <md-list flex>
+            <md-list-item class="md-2-line" ng-repeat="friend in friends track by $index" ng-click="null">
+              <div class="md-list-item-text" layout="column">
+                <h3>{{friend.name}}</h3>
+                <h4>{{friend.status}}</h4>
+              </div>
+            </md-list-item>
+          </md-list>
+        </md-content>
       </div>
     </div>
   </ion-content>

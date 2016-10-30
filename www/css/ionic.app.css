@@ -9885,3 +9885,14 @@ md-card {
 
 .add-friends-fab {
   top: 38px; }
+
+.user-list {
+  background-color: #f6f6f6;
+  height: 40vh !important;
+  margin-top: 22vh;
+  max-width: 40em !important;
+  margin-left: 19em; }
+  .user-list .item {
+    color: #5C789C;
+    font-size: 1.5em;
+    font-weight: 400; }
