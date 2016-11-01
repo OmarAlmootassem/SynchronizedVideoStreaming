@@ -65,7 +65,7 @@ angular.module('starter').controller('profileCtrl', ['$scope', '$mdToast', '$sta
             $scope.$applyAsync();
           }
         });
-        console.log($scope.allUsers);
+        //console.log($scope.allUsers);
         $mdDialog.show({
             locals:{dataToPass: $scope.allUsers, you: $rootScope.fbUser},
             clickOutsideToClose: true,
@@ -84,8 +84,8 @@ angular.module('starter').controller('profileCtrl', ['$scope', '$mdToast', '$sta
         }
 
         $scope.addFriend = function(friend){
-          console.log(friend);
-          console.log($scope.fbUser);
+          //console.log(friend);
+          //console.log($scope.fbUser);
           var friendUid = friend.uid;
           var fbData = {};
           fbData[friendUid] = 1;

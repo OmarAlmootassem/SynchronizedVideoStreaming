@@ -1,7 +1,7 @@
-<md-dialog aria-label="Add Friends">
+<md-dialog aria-label="Add Friends" ng-init='showFriends()'>
   <md-toolbar>
     <div class="md-toolbar-tools">
-      <h2 style="color: white">Search For Friends To Add</h2>
+      <h2 style="color: white">Choose a Friend to Watch {{movie.name}} With</h2>
       <span flex></span>
       <md-button class="md-icon-button" ng-click="cancel()">
         <md-icon md-svg-src="img/ic_close_white.svg" aria-label="Close dialog"></md-icon>
@@ -12,16 +12,12 @@
   <md-dialog-content>
     <div class="md-dialog-content">
       <p class="hidden-text">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</p>
-      <label class="item item-input">
-        <span class="input-label"><i class="icon ion-ios-search"></i> Search</span>
-        <input type="text" ng-model="userSearch.username" ng-model-options="{ debounce: 500 }">
-      </label>
       <md-content>
         <md-list flex>
-          <md-list-item class="md-2-line" ng-repeat="friend in allUsers track by $index" ng-click="addFriend(friend)">
+          <md-list-item class="md-2-line" ng-repeat="friend in friends track by $index" ng-click="inviteFriend(friend)">
             <div class="md-list-item-text" layout="column">
               <h3>{{friend.name}}</h3>
-              <h4>@{{friend.username}}</h4>
+              <h4>{{friend.status}}</h4>
             </div>
           </md-list-item>
         </md-list>

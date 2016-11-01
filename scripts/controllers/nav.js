@@ -1,5 +1,7 @@
-angular.module('starter').controller('navCtrl', ['$scope', '$timeout', '$state', function($scope, $timeout, $state) {
+angular.module('starter').controller('navCtrl', ['$scope', '$rootScope', '$state', '$timeout', '$mdToast', function($scope, $rootScope, $state, $timeout, $mdToast) {
     $scope.title = "Synchronized Video Streaming";
+    $scope.invites = [];
+    $scope.inviteIds = [];
 
     $scope.signOut = function(){
       firebase.auth().signOut().then(function() {
@@ -7,6 +9,58 @@ angular.module('starter').controller('navCtrl', ['$scope', '$timeout', '$state',
       }, function(error) {
         // An error happened.
       });
+    }
+
+    $scope.start = function(){
+      $timeout(function () {
+        $scope.watchInvites();
+      }, 1000);
+    }
+
+    $scope.watchInvites = function(){
+      var sessionsRef = firebase.database().ref('sessions').orderByChild('invitee').equalTo($rootScope.fbUser.uid);
+      sessionsRef.on('value', function(snapshot){
+        $scope.invites.length = 0;
+        snapshot.forEach(function(childSnapshot){
+          if (childSnapshot.val().status == 'pending'){
+            $scope.invites.push(childSnapshot.val());
+            $scope.inviteIds.push(childSnapshot.key);
+          }
+        });
+        console.log($scope.invites);
+        if ($scope.invites.length == 1){
+          firebase.database().ref('users/' + $scope.invites[0].creator).once('value').then(function(userSnap){
+            firebase.database().ref('movies/' + $scope.invites[0].movie).once('value').then(function(movieSnap){
+              console.log(userSnap.val());
+              var message = "You have an invite from " + userSnap.val().name + " to watch " + movieSnap.val().name;
+              $mdToast.show({
+                locals: {title: message, button1: "Watch", button2: "Reject", invite: $scope.invites[0], id: $scope.inviteIds[0]},
+                controller: mdToastCtrl,
+                templateUrl: 'templates/toast_multi_action.html',
+                hideDelay: false
+              });
+            });
+          });
+        } else {
+          $mdToast.hide();
+        }
+      });
+    }
+
+    var mdToastCtrl = function ($scope, title, button1, button2, invite, id) {
+        $scope.title = title;
+        $scope.button1 = button1;
+        $scope.button2 = button2;
+
+        $scope.reject = function() {
+          firebase.database().ref('sessions/' + id).update({
+            status: "rejected"
+          });
+        }
+
+        $scope.watch = function(friend){
+
+        }
     }
 
     $scope.goToProfile = function(){
