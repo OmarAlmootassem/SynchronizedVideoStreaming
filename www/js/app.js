@@ -153,6 +153,7 @@ angular.module('starter').controller('homeCtrl', ['$scope', '$mdDialog', '$state
       $scope.you = you;
       $scope.friends = [];
       $scope.friendIds = [];
+      $scope.waiting = false;
 
       $scope.cancel = function() {
         $mdDialog.cancel();
@@ -179,12 +180,32 @@ angular.module('starter').controller('homeCtrl', ['$scope', '$mdDialog', '$state
       }
 
       $scope.inviteFriend = function(friend){
+        $scope.waiting = true;
         $scope.sessionId = firebase.database().ref().child('sessions').push().key;
         firebase.database().ref('sessions/' + $scope.sessionId).update({
           creator: $scope.you.uid,
           invitee: friend.uid,
           movie: $scope.movie.uid,
           status: "pending"
+        },function(error){
+          if (error){
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            $scope.statusMessage = "Error: " + errorMessage;
+          } else {
+            $scope.statusMessage = "Request Sent! Waiting on Response...";
+            firebase.database().ref('sessions/' + $scope.sessionId).on('value', function(snapshot){
+              if (snapshot.val().status == "pending"){
+                $scope.statusMessage = "Request Sent! Waiting on Response...";
+              } else if (snapshot.val().status == "rejected"){
+                $scope.statusMessage = friend.name + " rejected your request...";
+              } else if (snapshot.val().status == "accepted"){
+                $scope.statusMessage = friend.name + " accepted your request. You will be transfered to the video page in 3 seconds";
+              }
+              $scope.$applyAsync();
+            });
+          }
+          $scope.$applyAsync();
         });
         console.log($scope.sessionId);
       }
@@ -252,7 +273,18 @@ angular.module('starter').controller('navCtrl', ['$scope', '$rootScope', '$state
         }
 
         $scope.watch = function(friend){
-
+          firebase.database().ref('sessions/' + id).update({
+            status: "accepted"
+          }, function(error){
+            if (error){
+              var errorCode = error.code;
+              var errorMessage = error.message;
+            } else {
+              $timeout(function () {
+                console.log("GOING TO WATCH MOVIE");
+              }, 3000);
+            }
+          });
         }
     }
 
@@ -307,6 +339,8 @@ angular.module('starter').controller('profileCtrl', ['$scope', '$mdToast', '$sta
       }, function(error){
         var message;
         if (error){
+          var errorCode = error.code;
+          var errorMessage = error.message;
           message = 'Error ' + errorCode + ": " + errorMessage
         } else {
           message = 'Profile Updated'

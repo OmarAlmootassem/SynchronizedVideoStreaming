@@ -13,7 +13,7 @@
     <div class="md-dialog-content">
       <p class="hidden-text">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</p>
       <md-content>
-        <md-list flex>
+        <md-list ng-if="!waiting" flex>
           <md-list-item class="md-2-line" ng-repeat="friend in friends track by $index" ng-click="inviteFriend(friend)">
             <div class="md-list-item-text" layout="column">
               <h3>{{friend.name}}</h3>
@@ -22,6 +22,10 @@
           </md-list-item>
         </md-list>
       </md-content>
+      <div ng-if="waiting" class="center-progress-div">
+        <md-progress-circular class="row" md-mode="indeterminate"></md-progress-circular>
+        <h3>{{statusMessage}}</h3>
+      </div>
   </md-dialog-content>
 
   <md-dialog-actions layout="row">

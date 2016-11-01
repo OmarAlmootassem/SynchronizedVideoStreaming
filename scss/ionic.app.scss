@@ -138,3 +138,11 @@ md-card {
   .hidden-text {
     color: white;
   }
+
+  .center-progress-div {
+    text-align: center !important;
+    width: 100% !important;
+    md-progress-circular {
+      display: inline-block;
+    }
+  }

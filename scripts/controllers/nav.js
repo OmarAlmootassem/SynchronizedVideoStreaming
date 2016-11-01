@@ -59,7 +59,18 @@ angular.module('starter').controller('navCtrl', ['$scope', '$rootScope', '$state
         }
 
         $scope.watch = function(friend){
-
+          firebase.database().ref('sessions/' + id).update({
+            status: "accepted"
+          }, function(error){
+            if (error){
+              var errorCode = error.code;
+              var errorMessage = error.message;
+            } else {
+              $timeout(function () {
+                console.log("GOING TO WATCH MOVIE");
+              }, 3000);
+            }
+          });
         }
     }
 

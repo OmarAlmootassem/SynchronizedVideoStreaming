@@ -40,6 +40,8 @@ angular.module('starter').controller('profileCtrl', ['$scope', '$mdToast', '$sta
       }, function(error){
         var message;
         if (error){
+          var errorCode = error.code;
+          var errorMessage = error.message;
           message = 'Error ' + errorCode + ": " + errorMessage
         } else {
           message = 'Profile Updated'
