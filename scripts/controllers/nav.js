@@ -67,7 +67,10 @@ angular.module('starter').controller('navCtrl', ['$scope', '$rootScope', '$state
               var errorMessage = error.message;
             } else {
               $timeout(function () {
-                console.log("GOING TO WATCH MOVIE");
+                firebase.database().ref('users/' + firebase.auth().currentUser.uid).update({
+                  watching: id
+                });
+                $state.go('watch');
               }, 3000);
             }
           });

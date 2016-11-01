@@ -1,0 +1,23 @@
+<ion-view cache-view="false" view-title="Watch" name="watch" ng-controller="watchCtrl" ng-init='getMovieInfo()' class='light' ng-cloak>
+  <ion-content scroll="true">
+    <div class="row">
+      <div class="col col-33 header">
+        <div class="header-image">
+          <img src="img/ic_local_play_blue.svg" />
+        </div>
+        <div class="header-title">
+          <h2>Watch {{movie.name}}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="row videogular-container">
+      <videogular vg-theme="config.theme.url" vg-auto-play="true" vg-update-state="onUpdateState($state)"
+        vg-update-time="onUpdateTime($currentTime, $duration)">
+    		<vg-media vg-src="config.sources"
+    				  vg-tracks="config.tracks"
+    				  vg-native-controls="true">
+    		</vg-media>
+    	</videogular>
+    </div>
+  </ion-content>
+</ion-view>

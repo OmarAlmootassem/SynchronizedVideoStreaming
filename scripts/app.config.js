@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic', 'ngMaterial'])
+angular.module('starter', ['ngSanitize', 'ionic', 'ngMaterial', 'com.2fdevs.videogular'])
 
 .run(['$ionicPlatform', '$rootScope', '$state', function($ionicPlatform, $rootScope, $state) {
   $ionicPlatform.ready(function() {
@@ -26,7 +26,7 @@ angular.module('starter', ['ionic', 'ngMaterial'])
         if ($rootScope.fbUser != null) {
             $rootScope.isLoggedIn = true;
             console.log("loggedIN");
-            $state.go("home");
+            $state.go("watch");
             // redirect to dashboard
         } else {
             $rootScope.isLoggedIn = false;
@@ -55,6 +55,12 @@ angular.module('starter', ['ionic', 'ngMaterial'])
     url: '/profile',
     templateUrl: 'templates/profile.html',
     controller: 'profileCtrl'
+  })
+
+  .state('watch', {
+    url: '/watch',
+    templateUrl: 'templates/watch.html',
+    controller: 'watchCtrl'
   })
 
   .state('home', {

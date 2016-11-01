@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic', 'ngMaterial'])
+angular.module('starter', ['ngSanitize', 'ionic', 'ngMaterial', 'com.2fdevs.videogular'])
 
 .run(['$ionicPlatform', '$rootScope', '$state', function($ionicPlatform, $rootScope, $state) {
   $ionicPlatform.ready(function() {
@@ -26,7 +26,7 @@ angular.module('starter', ['ionic', 'ngMaterial'])
         if ($rootScope.fbUser != null) {
             $rootScope.isLoggedIn = true;
             console.log("loggedIN");
-            $state.go("home");
+            $state.go("watch");
             // redirect to dashboard
         } else {
             $rootScope.isLoggedIn = false;
@@ -55,6 +55,12 @@ angular.module('starter', ['ionic', 'ngMaterial'])
     url: '/profile',
     templateUrl: 'templates/profile.html',
     controller: 'profileCtrl'
+  })
+
+  .state('watch', {
+    url: '/watch',
+    templateUrl: 'templates/watch.html',
+    controller: 'watchCtrl'
   })
 
   .state('home', {
@@ -117,7 +123,7 @@ angular.module('starter').controller('authCtrl', ['$scope', '$mdToast', function
 
   }]);
 
-angular.module('starter').controller('homeCtrl', ['$scope', '$mdDialog', '$state', '$rootScope', function($scope, $mdDialog, $state, $rootScope) {
+angular.module('starter').controller('homeCtrl', ['$scope', '$mdDialog', '$state', '$rootScope', '$mdToast', '$timeout', function($scope, $mdDialog, $state, $rootScope, $mdToast, $timeout) {
 
   $scope.movies = [];
 
@@ -132,7 +138,7 @@ angular.module('starter').controller('homeCtrl', ['$scope', '$mdDialog', '$state
             poster: url
           });
           $scope.$applyAsync();
-        })
+        });
       });
     });
   }
@@ -141,7 +147,7 @@ angular.module('starter').controller('homeCtrl', ['$scope', '$mdDialog', '$state
     console.log(movie);
     $mdDialog.show({
         locals:{movie: movie, you: $rootScope.fbUser},
-        clickOutsideToClose: true,
+        clickOutsideToClose: false,
         controllerAs: 'ctrl',
         templateUrl: 'templates/choose_friend.html',
         controller: mdDialogCtrl,
@@ -156,7 +162,20 @@ angular.module('starter').controller('homeCtrl', ['$scope', '$mdDialog', '$state
       $scope.waiting = false;
 
       $scope.cancel = function() {
-        $mdDialog.cancel();
+        if ($scope.sessionId.length > 0){
+          firebase.database().ref('sessions/' + $scope.sessionId).update({
+            status: "canceled"
+          },function(error){
+            if (error){} else {
+              $mdDialog.cancel();
+              $mdToast.show(
+              $mdToast.simple()
+                .textContent("Session Canceled!")
+                .hideDelay(3000)
+              );
+            }
+          });
+        }
       }
 
       $scope.showFriends = function(){
@@ -199,8 +218,18 @@ angular.module('starter').controller('homeCtrl', ['$scope', '$mdDialog', '$state
                 $scope.statusMessage = "Request Sent! Waiting on Response...";
               } else if (snapshot.val().status == "rejected"){
                 $scope.statusMessage = friend.name + " rejected your request...";
+                $timeout(function () {
+                  $mdDialog.cancel();
+                }, 3000);
               } else if (snapshot.val().status == "accepted"){
                 $scope.statusMessage = friend.name + " accepted your request. You will be transfered to the video page in 3 seconds";
+                firebase.database().ref('users/' + you.uid).update({
+                  watching: $scope.sessionId
+                });
+                $timeout(function () {
+                  $mdDialog.cancel();
+                  $state.go('watch');
+                }, 3000);
               }
               $scope.$applyAsync();
             });
@@ -281,7 +310,10 @@ angular.module('starter').controller('navCtrl', ['$scope', '$rootScope', '$state
               var errorMessage = error.message;
             } else {
               $timeout(function () {
-                console.log("GOING TO WATCH MOVIE");
+                firebase.database().ref('users/' + firebase.auth().currentUser.uid).update({
+                  watching: id
+                });
+                $state.go('watch');
               }, 3000);
             }
           });
@@ -395,3 +427,48 @@ angular.module('starter').controller('profileCtrl', ['$scope', '$mdToast', '$sta
         }
     }
   }]);
+
+angular.module('starter').controller('watchCtrl', ['$scope', '$sce', '$state', '$rootScope', '$mdToast', '$timeout', function($scope, $sce, $state, $rootScope, $mdToast, $timeout) {
+
+  $scope.getMovieInfo = function(){
+    firebase.database().ref('users/' + $rootScope.fbUser.uid).once('value').then(function(snapshot){
+      $scope.sessionId = snapshot.val().watching;
+      // console.log($scope.sessionId);
+      firebase.database().ref('sessions/' + $scope.sessionId).once('value').then(function(sessionSnapshot){
+        $scope.sessionInfo = sessionSnapshot.val();
+        // console.log($scope.sessionInfo);
+        firebase.database().ref('movies/' + $scope.sessionInfo.movie).once('value').then(function(movieSnapshot){
+          firebase.storage().ref('images/' + movieSnapshot.val().poster).getDownloadURL().then(function(image){
+            firebase.storage().ref('movies/' + movieSnapshot.val().movie).getDownloadURL().then(function(movie){
+              $scope.movie = {
+                uid: movieSnapshot.key,
+                name: movieSnapshot.val().name,
+                year: movieSnapshot.val().year,
+                poster: image,
+                movie: movie
+              };
+              $scope.$applyAsync();
+              console.log($scope.movie);
+
+              $scope.config = {
+        				preload: "none",
+        				sources: [
+        					{src: $sce.trustAsResourceUrl($scope.movie.movie), type: "video/mp4"}
+        				]
+        			};
+              $scope.$applyAsync();
+            });
+          });
+        });
+      });
+    });
+  }
+
+  $scope.onUpdateState = function($state){
+    console.log($state);
+  }
+
+  $scope.onUpdateTime = function($currentTime, $duration){
+    console.log($currentTime + " " + $duration);
+  }
+}]);

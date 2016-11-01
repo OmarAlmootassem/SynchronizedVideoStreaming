@@ -1,4 +1,4 @@
-angular.module('starter').controller('homeCtrl', ['$scope', '$mdDialog', '$state', '$rootScope', function($scope, $mdDialog, $state, $rootScope) {
+angular.module('starter').controller('homeCtrl', ['$scope', '$mdDialog', '$state', '$rootScope', '$mdToast', '$timeout', function($scope, $mdDialog, $state, $rootScope, $mdToast, $timeout) {
 
   $scope.movies = [];
 
@@ -13,7 +13,7 @@ angular.module('starter').controller('homeCtrl', ['$scope', '$mdDialog', '$state
             poster: url
           });
           $scope.$applyAsync();
-        })
+        });
       });
     });
   }
@@ -22,7 +22,7 @@ angular.module('starter').controller('homeCtrl', ['$scope', '$mdDialog', '$state
     console.log(movie);
     $mdDialog.show({
         locals:{movie: movie, you: $rootScope.fbUser},
-        clickOutsideToClose: true,
+        clickOutsideToClose: false,
         controllerAs: 'ctrl',
         templateUrl: 'templates/choose_friend.html',
         controller: mdDialogCtrl,
@@ -37,7 +37,20 @@ angular.module('starter').controller('homeCtrl', ['$scope', '$mdDialog', '$state
       $scope.waiting = false;
 
       $scope.cancel = function() {
-        $mdDialog.cancel();
+        if ($scope.sessionId.length > 0){
+          firebase.database().ref('sessions/' + $scope.sessionId).update({
+            status: "canceled"
+          },function(error){
+            if (error){} else {
+              $mdDialog.cancel();
+              $mdToast.show(
+              $mdToast.simple()
+                .textContent("Session Canceled!")
+                .hideDelay(3000)
+              );
+            }
+          });
+        }
       }
 
       $scope.showFriends = function(){
@@ -80,8 +93,18 @@ angular.module('starter').controller('homeCtrl', ['$scope', '$mdDialog', '$state
                 $scope.statusMessage = "Request Sent! Waiting on Response...";
               } else if (snapshot.val().status == "rejected"){
                 $scope.statusMessage = friend.name + " rejected your request...";
+                $timeout(function () {
+                  $mdDialog.cancel();
+                }, 3000);
               } else if (snapshot.val().status == "accepted"){
                 $scope.statusMessage = friend.name + " accepted your request. You will be transfered to the video page in 3 seconds";
+                firebase.database().ref('users/' + you.uid).update({
+                  watching: $scope.sessionId
+                });
+                $timeout(function () {
+                  $mdDialog.cancel();
+                  $state.go('watch');
+                }, 3000);
               }
               $scope.$applyAsync();
             });
