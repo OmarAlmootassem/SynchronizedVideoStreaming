@@ -11,8 +11,8 @@
       </div>
     </div>
     <div class="row videogular-container">
-      <videogular vg-theme="config.theme.url" vg-auto-play="true" vg-update-state="onUpdateState($state)"
-        vg-update-time="onUpdateTime($currentTime, $duration)">
+      <videogular vg-theme="config.theme.url" vg-auto-play="false" vg-player-ready="onPlayerReady($API)"
+      vg-update-state="onUpdateState($state)" vg-update-time="onUpdateTime($currentTime, $duration)">
     		<vg-media vg-src="config.sources"
     				  vg-tracks="config.tracks"
     				  vg-native-controls="true">

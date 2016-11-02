@@ -27,11 +27,11 @@ angular.module('starter').controller('navCtrl', ['$scope', '$rootScope', '$state
             $scope.inviteIds.push(childSnapshot.key);
           }
         });
-        console.log($scope.invites);
+        //console.log($scope.invites);
         if ($scope.invites.length == 1){
           firebase.database().ref('users/' + $scope.invites[0].creator).once('value').then(function(userSnap){
             firebase.database().ref('movies/' + $scope.invites[0].movie).once('value').then(function(movieSnap){
-              console.log(userSnap.val());
+              //console.log(userSnap.val());
               var message = "You have an invite from " + userSnap.val().name + " to watch " + movieSnap.val().name;
               $mdToast.show({
                 locals: {title: message, button1: "Watch", button2: "Reject", invite: $scope.invites[0], id: $scope.inviteIds[0]},
