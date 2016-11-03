@@ -18,9 +18,8 @@ angular.module('starter').controller('watchCtrl', ['$scope', '$sce', '$state', '
                 poster: image,
                 movie: movie
               };
-              $scope.$applyAsync();
-              // console.log($scope.movie);
 
+              $scope.$applyAsync();
               $scope.config = {
         				preload: "none",
         				sources: [
@@ -59,22 +58,12 @@ angular.module('starter').controller('watchCtrl', ['$scope', '$sce', '$state', '
           api.pause();
           console.log("PAUSE");
           oldSnap.status = "paused";
-          // firebase.database().ref('sessions/' + $scope.sessionId).update({
-          //   invitee_status: "paused",
-          //   creator_status: "paused"
-          // });
         } else if (snapshot.val().status == "playing"){
           api.seekTime(snapshot.val().pause_time, false);
           api.play();
           console.log("PLAY");
           oldSnap.status = "playing";
-          // firebase.database().ref('sessions/' + $scope.sessionId).update({
-          //   invitee_status: "playing",
-          //   creator_status: "playing"
-          // });
         }
-        //console.log(oldSnap);
-        // oldSnap = snapshot.val();
       });
     }, 2000);
   }
@@ -82,38 +71,34 @@ angular.module('starter').controller('watchCtrl', ['$scope', '$sce', '$state', '
   var oldState = "play";
   $scope.onUpdateState = function($state){
     console.log("Current: " + $state + " Old: " + oldState);
-    if ($state == "pause" && oldState != "pause"){
+    if ($state == "pause" && oldState != "seeking"){
       //console.log("STATE PAUSED");
-      if ($scope.sessionInfo.creator == $rootScope.fbUser.uid){
-        firebase.database().ref('sessions/' + $scope.sessionId).update({
-          status: "paused",
-          pause_time: $scope.currentTime
-        });
-      } else if ($scope.sessionInfo.invitee == $rootScope.fbUser.uid){
-        firebase.database().ref('sessions/' + $scope.sessionId).update({
-          status: "paused",
-          pause_time: $scope.currentTime
-        });
-      }
-    } else if ($state == "play" && oldState != "play"){
-      if ($scope.sessionInfo.creator == $rootScope.fbUser.uid){
-        firebase.database().ref('sessions/' + $scope.sessionId).update({
-          status: "playing"
-        });
-      } else if ($scope.sessionInfo.invitee == $rootScope.fbUser.uid){
-        firebase.database().ref('sessions/' + $scope.sessionId).update({
-          status: "playing"
-        });
-      }
+      firebase.database().ref('sessions/' + $scope.sessionId).update({
+        status: "paused",
+        pause_time: $scope.currentTime
+      });
+    } else if ($state == "play" && oldState != "seeking"){
+      firebase.database().ref('sessions/' + $scope.sessionId).update({
+        status: "playing"
+      });
+    } else if (oldState == "seeking"){
+      firebase.database().ref('sessions/' + $scope.sessionId).update({
+        status: "playing",
+        pause_time: $scope.currentTime
+      });
     }
     oldState = $state;
   }
+
   var oldTime = 0;
   $scope.onUpdateTime = function($currentTime, $duration){
     if ($currentTime - oldTime > 10){
       console.log("YES");
       oldTime = $currentTime;
       api.seekTime($currentTime, false);
+      oldState = "seeking";
+    } else {
+      oldState = "play";
     }
     $scope.currentTime = $currentTime;
   }

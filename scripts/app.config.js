@@ -26,7 +26,7 @@ angular.module('starter', ['ngSanitize', 'ionic', 'ngMaterial', 'com.2fdevs.vide
         if ($rootScope.fbUser != null) {
             $rootScope.isLoggedIn = true;
             console.log("loggedIN");
-            $state.go("watch");
+            $state.go("home");
             // redirect to dashboard
         } else {
             $rootScope.isLoggedIn = false;

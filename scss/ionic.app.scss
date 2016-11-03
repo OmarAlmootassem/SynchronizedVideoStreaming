@@ -147,28 +147,8 @@ md-card {
     }
   }
 
-  .videogular-container {
-    margin-top: 5vh !important;
-  	margin: auto;
-  }
-
-  @media (min-width: 1200px) {
-  	.videogular-container {
-  		width: 1170px;
-  		height: 658.125px;
-  	}
-  }
-
-  @media (min-width: 992px) and (max-width: 1199px) {
-  	.videogular-container {
-  		width: 940px;
-  		height: 528.75px;
-  	}
-  }
-
-  @media (min-width: 768px) and (max-width: 991px) {
-  	.videogular-container {
-  		width: 728px;
-  		height: 409.5px;
-  	}
-  }
+.videogular-container {
+  margin-top: 5vh !important;
+	width: 900px !important;
+	margin: auto;
+}
