@@ -344,7 +344,9 @@ angular.module('starter').controller('profileCtrl', ['$scope', '$mdToast', '$sta
           $scope.user.phone = "";
         }
       });
-      firebase.database().ref('users/' + $rootScope.fbUser.uid + '/friends').once('value').then(function(snapshot){
+      firebase.database().ref('users/' + $rootScope.fbUser.uid + '/friends').on('value', function(snapshot){
+        $scope.friendIds.length = 0;
+        $scope.friends.length = 0;
         snapshot.forEach(function(childSnapshot){
           $scope.friendIds.push(childSnapshot.key);
         });
