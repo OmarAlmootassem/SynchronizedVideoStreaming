@@ -18,6 +18,7 @@ angular.module('starter').controller('navCtrl', ['$scope', '$rootScope', '$state
     }
 
     $scope.watchInvites = function(){
+      console.log("monitoring Invites");
       var sessionsRef = firebase.database().ref('sessions').orderByChild('invitee').equalTo($rootScope.fbUser.uid);
       sessionsRef.on('value', function(snapshot){
         $scope.invites.length = 0;
@@ -33,6 +34,7 @@ angular.module('starter').controller('navCtrl', ['$scope', '$rootScope', '$state
             firebase.database().ref('movies/' + $scope.invites[0].movie).once('value').then(function(movieSnap){
               //console.log(userSnap.val());
               var message = "You have an invite from " + userSnap.val().name + " to watch " + movieSnap.val().name;
+              console.log($scope.inviteIds[0]);
               $mdToast.show({
                 locals: {title: message, button1: "Watch", button2: "Reject", invite: $scope.invites[0], id: $scope.inviteIds[0]},
                 controller: mdToastCtrl,
@@ -51,6 +53,7 @@ angular.module('starter').controller('navCtrl', ['$scope', '$rootScope', '$state
         $scope.title = title;
         $scope.button1 = button1;
         $scope.button2 = button2;
+        console.log(id);
 
         $scope.reject = function() {
           firebase.database().ref('sessions/' + id).update({

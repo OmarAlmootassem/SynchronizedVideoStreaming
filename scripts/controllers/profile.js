@@ -91,9 +91,12 @@ angular.module('starter').controller('profileCtrl', ['$scope', '$mdToast', '$sta
           //console.log(friend);
           //console.log($scope.fbUser);
           var friendUid = friend.uid;
-          var fbData = {};
-          fbData[friendUid] = 1;
-          firebase.database().ref('users/' + $scope.fbUser.uid + '/friends').update(fbData);
+          var fbData1 = {};
+          fbData1[friendUid] = 1;
+          var fbData2 = {};
+          fbData2[$scope.fbUser.uid] = 1;
+          firebase.database().ref('users/' + $scope.fbUser.uid + '/friends').update(fbData1);
+          firebase.database().ref('users/' + friendUid + '/friends').update(fbData2);
           $mdDialog.cancel();
         }
     }

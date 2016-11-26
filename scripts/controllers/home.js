@@ -74,6 +74,7 @@ angular.module('starter').controller('homeCtrl', ['$scope', '$mdDialog', '$state
       }
 
       $scope.inviteFriend = function(friend){
+        console.log($scope.sessionId);
         $scope.waiting = true;
         $scope.sessionId = firebase.database().ref().child('sessions').push().key;
         firebase.database().ref('sessions/' + $scope.sessionId).update({
