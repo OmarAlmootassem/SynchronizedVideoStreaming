@@ -266,6 +266,7 @@ angular.module('starter').controller('navCtrl', ['$scope', '$rootScope', '$state
       var sessionsRef = firebase.database().ref('sessions').orderByChild('invitee').equalTo($rootScope.fbUser.uid);
       sessionsRef.on('value', function(snapshot){
         $scope.invites.length = 0;
+        $scope.inviteIds.length = 0;
         snapshot.forEach(function(childSnapshot){
           if (childSnapshot.val().status == 'pending'){
             $scope.invites.push(childSnapshot.val());
