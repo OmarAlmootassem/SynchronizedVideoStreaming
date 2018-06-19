@@ -19,6 +19,9 @@ angular.module('starter').controller('navCtrl', ['$scope', '$rootScope', '$state
 
     $scope.watchInvites = function(){
       console.log("monitoring Invites");
+      if (!$rootScope.fbUser) {
+        return;
+      }
       var sessionsRef = firebase.database().ref('sessions').orderByChild('invitee').equalTo($rootScope.fbUser.uid);
       sessionsRef.on('value', function(snapshot){
         $scope.invites.length = 0;

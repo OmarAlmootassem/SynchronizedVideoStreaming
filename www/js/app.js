@@ -162,7 +162,7 @@ angular.module('starter').controller('homeCtrl', ['$scope', '$mdDialog', '$state
       $scope.waiting = false;
 
       $scope.cancel = function() {
-        if ($scope.sessionId.length > 0){
+        if ($scope.sessionId && $scope.sessionId.length > 0){
           firebase.database().ref('sessions/' + $scope.sessionId).update({
             status: "canceled"
           },function(error){
@@ -175,6 +175,8 @@ angular.module('starter').controller('homeCtrl', ['$scope', '$mdDialog', '$state
               );
             }
           });
+        } else {
+          $mdDialog.cancel();
         }
       }
 
@@ -263,6 +265,9 @@ angular.module('starter').controller('navCtrl', ['$scope', '$rootScope', '$state
 
     $scope.watchInvites = function(){
       console.log("monitoring Invites");
+      if (!$rootScope.fbUser) {
+        return;
+      }
       var sessionsRef = firebase.database().ref('sessions').orderByChild('invitee').equalTo($rootScope.fbUser.uid);
       sessionsRef.on('value', function(snapshot){
         $scope.invites.length = 0;

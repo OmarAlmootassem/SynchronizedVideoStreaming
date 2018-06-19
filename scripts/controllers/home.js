@@ -37,7 +37,7 @@ angular.module('starter').controller('homeCtrl', ['$scope', '$mdDialog', '$state
       $scope.waiting = false;
 
       $scope.cancel = function() {
-        if ($scope.sessionId.length > 0){
+        if ($scope.sessionId && $scope.sessionId.length > 0){
           firebase.database().ref('sessions/' + $scope.sessionId).update({
             status: "canceled"
           },function(error){
@@ -50,6 +50,8 @@ angular.module('starter').controller('homeCtrl', ['$scope', '$mdDialog', '$state
               );
             }
           });
+        } else {
+          $mdDialog.cancel();
         }
       }
 
